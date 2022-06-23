@@ -3,6 +3,7 @@ import 'package:shelf/shelf.dart';
 import 'apis/blog_noticia_api.dart';
 import 'apis/login_api.dart';
 import 'infra/custom_server.dart';
+import 'infra/middleware_interception.dart';
 import 'services/noticia_service.dart';
 import 'utils/custom_env.dart';
 
@@ -17,8 +18,11 @@ void main() async {
       .handler;
 
   //Colocando Middleware (repare no terminal '2022-06-19T20:58:34.870555  0:00:00.007970 GET     [200] /blog/noticias')
-  var handlerPipe =
-      Pipeline().addMiddleware(logRequests()).addHandler(cascadeHandlers);
+  var handlerPipe = Pipeline()
+      .addMiddleware(logRequests())
+      //adicionando a classe de middleware que faz a interceptação e transforma o text/plain em aplication/json
+      .addMiddleware(MiddlewareInterception().middlerware)
+      .addHandler(cascadeHandlers);
 
   await CustomServer().initializeServer(
     handler: handlerPipe,
