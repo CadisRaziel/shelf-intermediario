@@ -6,6 +6,7 @@ class SecurityServiceImp implements SecurityService<JWT> {
   @override
   Future<String> generateJWT(String userID) async {
     var jwt = JWT({
+      //* tudo aqui dentro é 'claim'
       //Esses nomes esta no arquivo txt 'aprendendo_jwt'
       //millisecondsSinceEpoch -> formato de data em numerico
       'iat': DateTime.now().millisecondsSinceEpoch,
@@ -27,8 +28,21 @@ class SecurityServiceImp implements SecurityService<JWT> {
   }
 
   @override
-  JWT? validateJWT(String token) {
-    // TODO: implement validateJWT
-    throw UnimplementedError();
+  Future<JWT?> validateJWT(String token) async {
+    String key = await CustomEnv.get(key: 'jwt_key');
+    //verify -> espera receber um token e uma chave (se ele vier preenchido é valido, e nao vier preenchido não é valido)
+    try {
+      return JWT.verify(token, SecretKey(key));
+    } on JWTInvalidError {
+      return null;
+    } on JWTExpiredError {
+      return null;
+    } on JWTNotActiveError {
+      return null;
+    } on JWTUndefinedError {
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 }
