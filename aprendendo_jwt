@@ -1,0 +1,29 @@
+Jwt Decoded
+
+//================\\
+Header :
+Algoritimo de incriptação
+tipo do token 'jwt', ' jws', etc...
+//================\\
+
+//================\\
+Payload:
+Pode conter informações como claim (mapa chave valor com informações padronizadas e customizadas)
+issuer "iss" -> Quem que é a pessoa identificadora que esta gerando o token
+subject "sub" -> Pra quem é aquele token (id de usuario ou host de um servidor)
+audience "aud" -> se é audiencia publica ou privada
+expiration time "exp" -> qual a vida util do token (1 hora, 1 dia, 1 request..)
+not before "nbf" -> o token nao é valido antes de determinado periodo (uma data)
+issued at "iat" ->  momento em que a chave é criada 
+jwt id "jti" -> id para nosso jwt (unica)
+
+claim public e private -> basicamente entra as claim customizada 
+exemplo: se eu quero devolver o id do usuario que ta no meu database, se eu quero devolve roules de permissoes daquele ususario, 'devolver informaçoes'
+//================\\
+
+//================\\
+Verify signature (assinatura)
+
+criptografia de chave (publica e privada)
+codifica o header, o payload, pega a chave privada (pode ou não codificar ela) e depois disso ele assina
+//================\\

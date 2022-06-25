@@ -4,15 +4,18 @@ import 'apis/blog_noticia_api.dart';
 import 'apis/login_api.dart';
 import 'infra/custom_server.dart';
 import 'infra/middleware_interception.dart';
+import 'infra/security/security_service_imp.dart';
 import 'services/noticia_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
-  //para poder acessar diversos .env
+  //para poder acessar diversos .env com diferentes informações
   // CustomEnv.fromFile('.env');
   //metodo para trabalhar com varios 'handlers' ja que na 'initializeServer' só aceita 1
   var cascadeHandlers = Cascade()
-      .add(LoginApi().handlerLoginApi)
+      //repare que ao passar a injeção de dependencia nos passamos quem esta implementando esse contrato
+      //porém no construtor da loginApi nos passamos o contrato 'SecurityService'
+      .add(LoginApi(SecurityServiceImp()).handlerLoginApi)
       //injetando dependencia como se fosse no provider (porém sem provider)
       .add(BlogNoticiaApi(NoticiaService()).handlerBlogApi)
       .handler;
