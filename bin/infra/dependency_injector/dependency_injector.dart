@@ -53,6 +53,7 @@ class DependencyInjector {
   //*di.register<LoginApi>(() => LoginApi(di()));
   //!porém eu nao vou optar por fazer isso pois o get me fala que eu estou buscando algo
   //!ou seja tudo onde eu passaria o get() eu nao preciso mais pois ele ja estaria implementado aqui
+  //?repare que eu preciso fazer esse call dentro da função que eu quero obviamente
   // call<T extends Object>() => get<T>();
 }
 

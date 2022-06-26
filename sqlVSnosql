@@ -1,0 +1,9 @@
+SQL -> banco relacional aonde os dados tem relação entre eles, usuario > produto > item > catalogo > estoque
+em dado momento se eu precisar agrupar ou desagrupar em uma sequencia logica eu consigo
+caracteristica -> vou ter um schema(nome do banco) e ou ter tabelas(tabela de usuario, tabela de produto, tabela de catalog...)
+
+NOSQL -> um banco onde eu nao vou fazer consultas ou filtros (poém é possivel fazer !!)
+a função do nosql é gaurdar documentos, graficos, chave e valor...
+nao vai ter relação nenhuma entre eles (é bom pra dados brutos)
+
+
