@@ -6,15 +6,16 @@ import 'api.dart';
 
 //vou aplicar um extension para poder utilizar o que ja esta implementar
 //se eu fizer implements eu vou sobrescrever uma classe que eu ja implementei
-class LoginApi extends Api {
+class LoginApi extends IApi {
   //injetando dependencia para podermos usar no nosso container de injeção de dependencia
   //Letra D do solid
-  final SecurityService _securityService;
+  final ISecurityService _securityService;
   LoginApi(this._securityService);
 
   @override
   Handler getHandler({
     List<Middleware>? middlewares,
+    bool isSecurity = false,
   }) {
     Router router = Router();
 

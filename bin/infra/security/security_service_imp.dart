@@ -4,7 +4,7 @@ import 'package:shelf/src/middleware.dart';
 import '../../utils/custom_env.dart';
 import 'security_service.dart';
 
-class SecurityServiceImp implements SecurityService<JWT> {
+class SecurityServiceImp implements ISecurityService<JWT> {
   SecurityServiceImp() {
     print('Objeto criado ${DateTime.now().microsecondsSinceEpoch}');
   }

@@ -26,7 +26,9 @@ class DependencyInjector {
   //metodo para registrar as intancias
   void register<T extends Object>(
     InstanceCreator<T> instance, {
-    bool isSingleton = false,
+
+    //isSingleton -> sempre que for singleton vai ser true por padrao
+    bool isSingleton = true,
   }) {
     _instanceMap[T] = _InstanceGenerator(
       instance,
@@ -42,6 +44,16 @@ class DependencyInjector {
     }
     throw Exception('[ERROR] -> Instance ${T.toString()} not found');
   }
+
+  //*Implementando interface calleb
+  //*Porque fazer isso ?
+  //*Olha na pagina 'injects.dart' a gente estava fazendo isso
+  //*di.register<LoginApi>(() => LoginApi(di.get()));
+  //*agora fazemos isso
+  //*di.register<LoginApi>(() => LoginApi(di()));
+  //!porém eu nao vou optar por fazer isso pois o get me fala que eu estou buscando algo
+  //!ou seja tudo onde eu passaria o get() eu nao preciso mais pois ele ja estaria implementado aqui
+  // call<T extends Object>() => get<T>();
 }
 
 //responsabilidade dessa classe privada

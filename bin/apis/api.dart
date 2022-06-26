@@ -3,25 +3,39 @@ import 'package:shelf/shelf.dart';
 import '../infra/dependency_injector/dependency_injector.dart';
 import '../infra/security/security_service.dart';
 
-abstract class Api {
+abstract class IApi {
   //2 metodos
 
   //um que o usuario precisa implementar
-  Handler getHandler({List<Middleware>? middlewares});
+  Handler getHandler({
+    List<Middleware>? middlewares,
+    bool isSecurity = false,
+  });
 
   //um que vamos deixar implementado
   Handler createHandler({
     required Handler router,
     List<Middleware>? middlewares,
+    bool isSecurity = false,
   }) {
-    //*Utilizando nosso injetor de dependencia igual o get it
-    //_di vai retornar sempre a mesma instancia !!
-    final _di = DependencyInjector();
-
-    var _securityService = _di.get<SecurityService>();
-
     //se for nulo atribui uma lista vazia
+    //fazendo isso aqui eu nao preciso ficar fazendo isso
+    //middlewares?.addAll
+    //middlewares?.forEach
     middlewares ??= [];
+
+    //se o isSecurity for true ele adiciona o _securityService
+    //se oisSecurity for false ele nao adiciona o _securityService
+    if (isSecurity == true) {
+      //*Utilizando nosso injetor de dependencia igual o get it
+      //DependencyInjector() vai retornar sempre a mesma instancia é um singleton !!
+      var _securityService = DependencyInjector().get<ISecurityService>();
+
+      middlewares.addAll([
+        _securityService.authorization,
+        _securityService.verifyJwt,
+      ]);
+    }
 
     //criando uma pipeline e devolvendo um handler
     var pipe = Pipeline();

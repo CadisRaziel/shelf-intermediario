@@ -1,6 +1,6 @@
 import 'package:shelf/shelf.dart';
 
-abstract class SecurityService<T> {
+abstract class ISecurityService<T> {
   Future<String> generateJWT(String userID);
   Future<T?> validateJWT(String token);
 

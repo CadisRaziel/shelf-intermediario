@@ -3,43 +3,26 @@ import 'package:shelf/shelf.dart';
 import 'apis/blog_noticia_api.dart';
 import 'apis/login_api.dart';
 import 'infra/custom_server.dart';
-import 'infra/dependency_injector/dependency_injector.dart';
+import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
-import 'infra/security/security_service.dart';
-import 'infra/security/security_service_imp.dart';
-import 'services/noticia_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
-  //*Utilizando nosso injetor de dependencia igual o get it
-  //_di vai retornar sempre a mesma instancia !!
-  final _di = DependencyInjector();
+  //!Rever a aula 22 para entender melhor injecao de dependencia "https://www.youtube.com/watch?v=Gp4ArNTc2HA&list=PLRpTFz5_57csByx34C_98wPn3PAxnUDFr&index=24&ab_channel=DeividWillyan%7CFlutter"
 
-  //lembrando para fazer a injeção de dependencia precisamos que as classes tenha o D do solid
-  //no 'LoginApi' olhe no construtor dele !!
-  //repare que aqui a tipagem do SecurityService inicialmente era um 'T'
-  _di.register<SecurityService>(() => SecurityServiceImp(), isSingleton: true);
-
-  var _securityService = _di.get<SecurityService>();
+  //Objeto criado para melhorar a responsabilidade unica da classe main
+  final _di = Injects.initialize();
 
   //para poder acessar diversos .env com diferentes informações
   // CustomEnv.fromFile('.env');
   //metodo para trabalhar com varios 'handlers' ja que na 'initializeServer' só aceita 1
+
   var cascadeHandlers = Cascade()
-      //repare que ao passar a injeção de dependencia nos passamos quem esta implementando esse contrato
-      //porém no construtor da loginApi nos passamos o contrato 'SecurityService'
-      .add(LoginApi(_securityService).getHandler())
-      //injetando dependencia como se fosse no provider (porém sem provider)
+      .add(_di.get<LoginApi>().getHandler())
       .add(
-        BlogNoticiaApi(NoticiaService()).getHandler(
-          middlewares: [
-            //repare agora que eu nao preciso ter a autorização e a verificação ali em baixo na pipeline
-            //como estão implementados aqui só serão executados aqui (assim vai para outras apis)
-            //isso deixa a pipeline local, do jeito que esta comentado ali em baixo esta global
-            _securityService.authorization,
-            _securityService.verifyJwt,
-          ],
-        ),
+        //isSecurity se for true é necessario que os middleware de segurança seja aplicado nele
+        //se for false ele nao precisa ter os middleware de segurança (nao preciso especificar)
+        _di.get<BlogNoticiaApi>().getHandler(isSecurity: true),
       )
       .handler;
 
