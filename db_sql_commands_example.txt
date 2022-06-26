@@ -1,0 +1,131 @@
+//============ TABELA USUARIOS =============\\
+
+//apresentando tudo que tiver na tabela usuarios
+SELECT * FROM usuarios;
+
+//apresentando nome e email da tabela usuarios
+SELECT nome, email FROM usuarios;
+
+
+//inserindo um novo usuario na mão
+INSERT INTO usuarios (nome, email, password) VALUES ('1', 'Vitor@gmail.com', '1234');
+INSERT INTO usuarios (nome, email, password) VALUES ('dylan', 'dylan@gmail.com', '4321');
+
+
+//buscando um usuario pelo id
+SELECT * FROM usuarios WHERE id = 2;
+
+
+//buscando um usuario pelo id e pelo nome (os dois precisam estar corretos)
+SELECT * FROM usuarios WHERE id = 2 and nome = 'dylan';
+
+
+//buscando um usuario pelo id se nao tiver ele busca pelo nome (somente um precisa estar correto)
+SELECT * FROM usuarios WHERE id = 2 or nome = 'XPTO';
+
+//atualizando o nome de um usuario (nao esqueca de por o 'WHERE' para ele encontrar o id correto)
+UPDATE usuarios set nome = 'Vitor Brussolo Zerbato' WHERE id = 1
+
+//atualizando nome e password de um usuario (nao esqueca o WHERE especificando o id)
+UPDATE usuarios set nome = 'Vitor Brussolo Zerbato', password = 'ola' WHERE id = 1;
+
+//deletando o usuario pelo id
+DELETE from usuarios WHERE id = 1;
+//============ TABELA USUARIOS =============\\
+
+
+
+//============ TABELA NOTICIAS =============\\
+//apresenta todas noticias
+SELECT * FROM noticias;
+
+//inserindo uma noticia na mao (repare que para passar o id_usaurio eu preciso ter um usuario !!)
+INSERT INTO noticias (titulo, descricao, id_usuario) VALUES ('Noticia doida', 'Se chove a terra molha', 1);
+
+//alterando o titulo da noticia que tem id 1, e passando o id do usuario
+UPDATE noticias set titulo = 'noticia chuva' WHERE id = 1 and id_usuario = 1;
+
+//apresentando as noticias de um usuario com id especifico
+SELECT * FROM noticias WHERE id = 4;
+
+
+//fazendo uma consulta que inclui duas tabelas a de noticias e a de usuarios
+//repare que eu posso criar um 'alias' (posso por qualquer nome ali pois será um apelido pra podermos pegar varias informações)
+//Com o INNER JOIN eu consigo fazer a comparação entre duas tabelas e traze informação das duas
+//lembre-se id e id_usuario tem um relacionamento entre eles mesmo sendo de tabelas diferentes
+SELECT
+	aliasNoticia.titulo,
+    aliasNoticia.descricao,
+    aliasNoticia.dt_autalizacao,
+    aliasUsuario.nome
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+--------------------------------------------
+ou posso fazer isso tambem para ver as duas tabelas juntas
+SELECT
+	*
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+--------------------------------------------
+//tambem podemos aplicar 'alias' para os nomes de colunas para ficar mais apresentavel em uma apresentação
+//utilizando o 'AS'
+SELECT
+	aliasNoticia.titulo AS 'Titulo' ,
+    aliasNoticia.descricao AS 'Descrição',
+    aliasNoticia.dt_autalizacao AS 'Ultima atualização',
+    aliasUsuario.nome as 'Autor'
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+--------------------------------------------
+//podemos tambem utilizar filtros
+SELECT
+	aliasNoticia.titulo AS 'Titulo' ,
+    aliasNoticia.descricao AS 'Descrição',
+    aliasNoticia.dt_autalizacao AS 'Ultima atualização',
+    aliasUsuario.nome as 'Autor'
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+WHERE aliasUsuario.nome = 'dylan';
+--------------------------------------------
+//podemos utilizar o 'LIKE' para pegar todos os 'dylan' que existir, exemplo 'dylan dois', 'dylan asuhduash', 'dylan 48'
+//nao esqueca de por o '%' no final do nome
+//posso procurar tudo que começa com 'V' = WHERE aliasUsuario.nome LIKE 'V%';
+SELECT
+	aliasNoticia.titulo AS 'Titulo' ,
+    aliasNoticia.descricao AS 'Descrição',
+    aliasNoticia.dt_autalizacao AS 'Ultima atualização',
+    aliasUsuario.nome as 'Autor'
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+WHERE aliasUsuario.nome LIKE 'dylan%';
+--------------------------------------------
+//posso tambem pegar o id da noticia
+SELECT
+	aliasNoticia.titulo AS 'Titulo' ,
+    aliasNoticia.descricao AS 'Descrição',
+    aliasNoticia.dt_autalizacao AS 'Ultima atualização',
+    aliasUsuario.nome as 'Autor'
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+WHERE aliasUsuario.nome LIKE 'dylan%'
+AND aliasNoticia.id = 2;
+
+
+//fazendo ordenações por data (para ultima virar a primeira)
+//para isso utilizamos o ORDER BY e DESC (desc -> decrescente)
+//posso trocar o 'DESC' e por 'ASC' (asc -> acrescente
+SELECT
+	aliasNoticia.titulo AS 'Titulo' ,
+    aliasNoticia.descricao AS 'Descrição',
+    aliasNoticia.dt_autalizacao AS 'Ultima atualização',
+    aliasUsuario.nome as 'Autor'
+FROM noticias aliasNoticia
+INNER JOIN usuarios aliasUsuario on aliasUsuario.id = aliasNoticia.id_usuario
+ORDER BY aliasNoticia.dt_autalizacao DESC;
+
+
+//para ao invés dele apresenta todas as noticias apresentar somente até uma certa quantidade de id
+//para isso utilizamos o 'LIMIT'
+SELECT * FROM noticias LIMIT 5;
+
+//============ TABELA NOTICIAS =============\\
