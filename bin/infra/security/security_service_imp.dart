@@ -1,4 +1,6 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/src/middleware.dart';
 import '../../utils/custom_env.dart';
 import 'security_service.dart';
 
@@ -45,4 +47,38 @@ class SecurityServiceImp implements SecurityService<JWT> {
       return null;
     }
   }
+
+  @override
+  // TODO: implement authorization
+  Middleware get authorization {
+    return (Handler handler) {
+      return (Request req) async {
+        String? authorizationHeader = req.headers['Authorization'];
+        JWT? jwt;
+        if (authorizationHeader != null) {
+          if (authorizationHeader.startsWith('Bearer ')) {
+            String token = authorizationHeader.substring(7);
+            jwt = await validateJWT(token);
+          }
+        }
+        var request = req.change(context: {'jwt': jwt});
+        return handler(request);
+      };
+    };
+  }
+
+  //!createMiddleware => é exatamente a mesma coisa que fizemos no metodo acima 'authorization'
+  //! a diferença é que para didadica o metodo 'authorization' fizemos na mão só pra aprende seu funcionamento
+  //! o metodo createMiddleware ja traz tudo o que esta acima para nós
+  @override
+  // TODO: implement verifyJwt
+  Middleware get verifyJwt => createMiddleware(
+        requestHandler: (Request req) {
+          //se a requisição for diferente de login ela vem pra ca \/
+          if (req.context['jwt'] == null) {
+            return Response.forbidden('Not authozired');
+          }
+          return null;
+        },
+      );
 }

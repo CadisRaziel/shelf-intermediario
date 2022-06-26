@@ -5,14 +5,16 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../models/noticia_model.dart';
 import '../services/generic_service.dart';
+import 'api.dart';
 
-class BlogNoticiaApi {
+class BlogNoticiaApi extends Api {
   //Injetando dependencia do 'IGenericService' aqui dentro do BlogNoticiaApi
   //Essa classe sabe que existe um contrato que implementa os metodos, mais ele nao sabe quem pois pra ele nao importa
   final IGenericService<NoticiaModel> _service;
   BlogNoticiaApi(this._service);
 
-  Handler get handlerBlogApi {
+  @override
+  Handler getHandler({List<Middleware>? middlewares}) {
     Router router = Router();
 
     //!CRUD
@@ -53,6 +55,9 @@ class BlogNoticiaApi {
       return Response.ok('Api de blog');
     });
 
-    return router;
+    return createHandler(
+      router: router,
+      middlewares: middlewares,
+    );
   }
 }
