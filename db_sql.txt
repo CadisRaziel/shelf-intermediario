@@ -1,0 +1,35 @@
+//Se o banco 'dart' não existe eu vou criar ele, se ja existe eu vou usar ele
+CREATE SCHEMA IF NOT EXISTS `dart` DEFAULT CHARACTER SET utf8;
+USE `dart`;
+
+
+//se nao existir vai cria essas duas tabelas
+
+//as duas tabelas tem um relacionamento com o id do usuario
+
+CREATE TABLE IF NOT EXISTS `dart`.`usuarios` ( -> essa tabela chama 'usuarios'
+  `id` INT NOT NULL AUTO_INCREMENT, -> id é um int, não pode ser null e é auto increment, ele mesmmo vai fazer um increment++
+  `nome` VARCHAR(255) NOT NULL, -> nome é um varchar(texto 'string') até 255 caracteres e nao pode ser null
+  `email` VARCHAR(255) NOT NULL, -> email é um varchar(texto 'string') até 255 caracteres e nao pode ser null
+  `password` VARCHAR(255) NOT NULL, -> password é um varchar(texto 'string') até 255 caracteres e nao pode ser null
+  `is_ativo` TINYINT NULL DEFAULT 1, -> pode ser nulla, mais sempre vai começar com 1 (verifica se o usuario ta ativo ou não) [0 = false, 1 = true]
+  `dt_criacao` datetime DEFAULT CURRENT_TIMESTAMP, -> data de criação (data do momento que é inserido na base)
+  `dt_autalizacao` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+  PRIMARY KEY (`id`)) -> minha chave primarai da tabela usuario é o 'id'
+ENGINE = InnoDB; 
+
+
+CREATE TABLE IF NOT EXISTS `dart`.`noticias` ( -> essa tabela chama 'noticias'
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(255) NOT NULL,
+  `descricao` LONGTEXT NOT NULL,
+  `dt_criacao` datetime DEFAULT CURRENT_TIMESTAMP,
+  `dt_autalizacao` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_usuario` INT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id_usuario` -> id_usuario fazendo referencia com a primary key 'usuarios' que é 'id'
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `dart`.`usuarios` (`id`)  -> id_usuario fazendo referencia com a primary key 'usuarios' que é 'id'
+    ON DELETE NO ACTION -> nao vou ter ações de update e delete com o 'id'
+    ON UPDATE NO ACTION) -> nao vou ter ações de update e delete com o 'id'
+ENGINE = InnoDB;

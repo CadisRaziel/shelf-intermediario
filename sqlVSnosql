@@ -7,3 +7,4 @@ a função do nosql é gaurdar documentos, graficos, chave e valor...
 nao vai ter relação nenhuma entre eles (é bom pra dados brutos)
 
 
+Obs: firestore do firebase não é sql é nosql

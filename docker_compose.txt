@@ -1,0 +1,31 @@
+docker-compose.xml -> responsavel por subir um container ja todo configurado para instalar nosso database
+
+yml -> sensitivo aos espaços, todos os espaços precisam estar corretos !!
+
+
+version: '3.3' -> versão que estou trabalhando
+
+
+
+services: -> temos um unico serviço de database
+  database:
+
+    image: mysql:5.7 -> minha imagem
+    container_name: mysql -> nome do container
+    restart: always -> toda vez que o container reiniciar, ele restarta o servidor
+
+    environment:
+      MYSQL_DATABASE: 'dart'  -> schema
+      MYSQL_USER: 'dart_user'
+      MYSQL_PASSWORD: 'dart_pass'      
+      MYSQL_ROOT_PASSWORD: 'vrhythms69'
+
+    ports: -> porta padrao do mysql 3306
+      - '3306:3306'
+
+    expose: -> porta que vamos expor
+      - '3306'
+
+    volumes: 
+      - './volumes/mysql:/var/lib/mysql' -> cria localmente onde o docker compose subir o volume pra nós, como se fosse configuraçoes do databse
+      - "./db.sql:/docker-entrypoint-initdb.d/1.sql" -> e vai rodar nosso arquivo 'db.sql', ou seja assim que subir ele executa esse script pra nós
