@@ -1,0 +1,8 @@
+//singleton -> instancia unica do inicio ao fim da aplicação
+//não importa quantas vezes eu recupere essa instancia
+//assim que ela for criada, vai ser alocada na memoria do dispositivo
+//e quando o usuario matar a aplicação a instancia morre
+
+//factory -> crio uma instancia, trabalho ela só enquanto o usuario esta interagindo
+//assim que ele para o garbage collection limpa o objeto da memoria
+//e toda vez que eu recuperar esse factory eu crio uma nova instancia desse objeto

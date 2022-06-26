@@ -1,5 +1,8 @@
 import 'package:shelf/shelf.dart';
 
+import '../infra/dependency_injector/dependency_injector.dart';
+import '../infra/security/security_service.dart';
+
 abstract class Api {
   //2 metodos
 
@@ -11,6 +14,12 @@ abstract class Api {
     required Handler router,
     List<Middleware>? middlewares,
   }) {
+    //*Utilizando nosso injetor de dependencia igual o get it
+    //_di vai retornar sempre a mesma instancia !!
+    final _di = DependencyInjector();
+
+    var _securityService = _di.get<SecurityService>();
+
     //se for nulo atribui uma lista vazia
     middlewares ??= [];
 

@@ -5,6 +5,9 @@ import '../../utils/custom_env.dart';
 import 'security_service.dart';
 
 class SecurityServiceImp implements SecurityService<JWT> {
+  SecurityServiceImp() {
+    print('Objeto criado ${DateTime.now().microsecondsSinceEpoch}');
+  }
   @override
   Future<String> generateJWT(String userID) async {
     var jwt = JWT({

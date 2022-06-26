@@ -3,6 +3,7 @@ import 'package:shelf/shelf.dart';
 import 'apis/blog_noticia_api.dart';
 import 'apis/login_api.dart';
 import 'infra/custom_server.dart';
+import 'infra/dependency_injector/dependency_injector.dart';
 import 'infra/middleware_interception.dart';
 import 'infra/security/security_service.dart';
 import 'infra/security/security_service_imp.dart';
@@ -10,9 +11,16 @@ import 'services/noticia_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
-  //criamos um objeto aqui pra não ficar repetindo instancia ao passar para os demais campos logo abaixo
-  //antes estava criando 3 objetos na memoria, agora só temos 1 que é o correto
-  SecurityService _securityService = SecurityServiceImp();
+  //*Utilizando nosso injetor de dependencia igual o get it
+  //_di vai retornar sempre a mesma instancia !!
+  final _di = DependencyInjector();
+
+  //lembrando para fazer a injeção de dependencia precisamos que as classes tenha o D do solid
+  //no 'LoginApi' olhe no construtor dele !!
+  //repare que aqui a tipagem do SecurityService inicialmente era um 'T'
+  _di.register<SecurityService>(() => SecurityServiceImp(), isSingleton: true);
+
+  var _securityService = _di.get<SecurityService>();
 
   //para poder acessar diversos .env com diferentes informações
   // CustomEnv.fromFile('.env');

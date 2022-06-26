@@ -7,6 +7,8 @@ import 'api.dart';
 //vou aplicar um extension para poder utilizar o que ja esta implementar
 //se eu fizer implements eu vou sobrescrever uma classe que eu ja implementei
 class LoginApi extends Api {
+  //injetando dependencia para podermos usar no nosso container de injeção de dependencia
+  //Letra D do solid
   final SecurityService _securityService;
   LoginApi(this._securityService);
 
