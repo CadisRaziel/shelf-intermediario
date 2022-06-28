@@ -6,6 +6,8 @@ import '../../apis/login_api.dart';
 import '../../models/noticia_model.dart';
 import '../../services/generic_service.dart';
 import '../../services/noticia_service.dart';
+import '../database/db_configuration.dart';
+import '../database/mysql_db_configuration_imp.dart';
 import '../security/security_service.dart';
 import '../security/security_service_imp.dart';
 import 'dependency_injector.dart';
@@ -14,6 +16,8 @@ class Injects {
   static DependencyInjector initialize() {
     //di vai retornar sempre a mesma instancia !!
     var di = DependencyInjector();
+
+    di.register<IDBConfiguration>(() => MysqlDbConfigurationIMP());
 
     //lembrando para fazer a injeção de dependencia precisamos que as classes tenha o D do solid
     //no 'LoginApi' olhe no construtor dele !!
