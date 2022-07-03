@@ -4,4 +4,6 @@ abstract class IDBConfiguration {
 
   //getter para a conexao ja configurada
   Future<dynamic> get connection;
+
+  execQuery(String sql, [List? params]);
 }

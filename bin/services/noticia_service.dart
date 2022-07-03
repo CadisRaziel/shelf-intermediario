@@ -1,58 +1,37 @@
+import '../dao/noticia_dao_imp.dart';
 import '../models/noticia_model.dart';
-import '../utils/list_extension.dart';
 import 'generic_service.dart';
 
 class NoticiaService implements IGenericService<NoticiaModel> {
-  //criando uma lista de noticia para simular um banco de dados
-  final List<NoticiaModel> _fakeDB = [];
+  final NoticiaDaoImp _noticiaDaoImp;
+  NoticiaService(this._noticiaDaoImp);
 
   @override
   Future<bool> delete(int id) async {
-    _fakeDB.removeWhere((e) => e.id == id);
-    return true;
+    return _noticiaDaoImp.delete(id);
   }
 
   @override
   Future<List<NoticiaModel>> findAll() async {
-    return _fakeDB;
+    return _noticiaDaoImp.findAll();
   }
 
   @override
   Future<NoticiaModel?> findOne(int id) async {
-    return _fakeDB.firstWhere((e) => e.id == id);
+    return _noticiaDaoImp.findOne(id);
   }
 
   @override
   Future<bool> save(NoticiaModel value) async {
-    //*Não Utilizando nossa extension que retorna null
-    // NoticiaModel model = _fakeDB.firstWhere(
-    //   //*se não encontrarmos o nosso 'id' dentro da lista
-    //   //*if
-    //   (e) => e.id == value.id,
-    //   //*nos utilizaremos o 'orElse' para retornar o value
-    //   //*orElse é como se fosse um if else
-    //   //*else
-    //   orElse: (() {
-    //     _fakeDB.add(value);
-    //     return value;
-    //   }),
-    // );
-    // return true;
+    //!Como eu sei se estou criando uma notica ou atualizando uma notica ?
+    //!a resposta é: a partir do ID
+    //!Quando eu crio a notica ela NUNCA tem ID
+    //!Quando eu atualizo a notica ele TEM ID
 
-    //*Utilizando nossa extension que retorna null
-    NoticiaModel? model = _fakeDB.firstWhereOrNull(
-      (e) => e.id == value.id,
-    );
-    //se o model nao for encontrado igual a null significa que é um novo objeto
-    if (model == null) {
-      //com isso adicionamos o value então
-      _fakeDB.add(value);
+    if (value.id != null) {
+      return _noticiaDaoImp.update(value);
     } else {
-      //se o model for encontrado e for diferente de nullo (ele ja existe)
-      //o indexOf vai me devolver o index do model dentro da nossa lista
-      var index = _fakeDB.indexOf(model);
-      _fakeDB[index] = value;
+      return _noticiaDaoImp.create(value);
     }
-    return true;
   }
 }

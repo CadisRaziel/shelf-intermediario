@@ -1,7 +1,7 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:shelf/shelf.dart';
 
-import 'apis/blog_noticia_api.dart';
+import 'apis/noticias_api.dart';
 import 'apis/login_api.dart';
 import 'apis/usuario_api.dart';
 import 'dao/usuarios_dao_imp.dart';
@@ -40,7 +40,7 @@ void main() async {
       .add(
         //isSecurity se for true é necessario que os middleware de segurança seja aplicado nele
         //se for false ele nao precisa ter os middleware de segurança (nao preciso especificar)
-        _di.get<BlogNoticiaApi>().getHandler(isSecurity: true),
+        _di.get<NoticiasApi>().getHandler(isSecurity: true),
       )
       .add(_di.get<UsuarioApi>().getHandler(isSecurity: true))
       .handler;

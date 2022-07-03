@@ -1,54 +1,48 @@
 import 'dart:convert';
 
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class NoticiaModel {
-  //porque int? olhe na api de blog/noticias e veja que noticias precisa de um id
-  final int? id;
-  final String titulo;
-  final String descricao;
-  final String imagem;
-  final DateTime dtPublicacao;
-  final DateTime? dtAtualizacao;
+  int? id;
+  String? title;
+  String? description;
+  DateTime? dtCreated;
+  DateTime? dtUpdated;
+  int? userId;
 
-  NoticiaModel(
-    this.id,
-    this.titulo,
-    this.descricao,
-    this.imagem,
-    this.dtPublicacao,
-    this.dtAtualizacao,
-  );
+  NoticiaModel();
 
-  @override
-  String toString() {
-    return 'NoticiaModel(id: $id, titulo: $titulo, descricao: $descricao, imagem: $imagem, dtPublicacao: $dtPublicacao, dtAtualizacao: $dtAtualizacao)';
+  factory NoticiaModel.fromMap(Map<String, dynamic> map) {
+    //!Caso der um erro de 'Blop' de um toString() aonde deu erro
+    //!Aqui deu erro de Blop no descricao
+    return NoticiaModel()
+      ..id = map['id']?.toInt()
+      ..title = map['titulo']
+      ..description = map['descricao'].toString()
+      ..dtCreated = map['dt_criacao']
+      ..dtUpdated = map['dt_autalizacao']
+      ..userId = map['id_usuario']?.toInt();
   }
 
-  Map<String, dynamic> toMap() {
+  factory NoticiaModel.fromRequest(Map<String, dynamic> map) {
+    return NoticiaModel()
+      ..id = map['id']?.toInt()
+      ..title = map['title']
+      ..description = map['description']
+      // ..dtCreated = map['dt_criacao']
+      // ..dtUpdated = map['dt_autalizacao']
+      ..userId = map['userId']?.toInt();
+  }
+
+  Map toJson() {
     return {
       'id': id,
-      'titulo': titulo,
-      'descricao': descricao,
-      'imagem': imagem,
-      'dtPublicacao': dtPublicacao.millisecondsSinceEpoch,
-      'dtAtualizacao': dtAtualizacao?.millisecondsSinceEpoch,
+      'title': title,
+      'description': description,
     };
   }
 
-  factory NoticiaModel.fromMap(Map<String, dynamic> map) {
-    return NoticiaModel(
-      map['id'] ?? '',
-      map['titulo'] ?? '',
-      map['descricao'] ?? '',
-      map['imagem'] ?? '',
-      DateTime.fromMillisecondsSinceEpoch(map['dtPublicacao']),
-      map['dtAtualizacao'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['dtAtualizacao'])
-          : null,
-    );
+  @override
+  String toString() {
+    return 'NoticiaModel(id: $id, title: $title, description: $description, dtCreated: $dtCreated, dtUpdated: $dtUpdated, userId: $userId)';
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory NoticiaModel.fromJson(String source) =>
-      NoticiaModel.fromMap(json.decode(source));
 }

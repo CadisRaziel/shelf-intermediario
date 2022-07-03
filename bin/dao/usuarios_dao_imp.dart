@@ -15,19 +15,13 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
   //o IDBConfiguration devolve nosso banco de dados configurado com o metodo 'connection'
   final IDBConfiguration _dbConfiguration;
   UsuariosDaoImp(this._dbConfiguration);
-
-  _execQuery(String sql, [List? params]) async {
-    var connection = await _dbConfiguration.connection;
-    return await connection.query(sql, params);
-  }
-
   @override
   Future<bool> create(UsuarioModel value) async {
     //* Devemos colocar '?' nos campos pois o mysql ja sabe aonde ele tem que por os valores
     //*'INSERT INTO usuarios (nome, email, password) VALUES ('Deivid', 'deivid@email.com', '123456')'
     //* então vai ficar assim: (lembre-se é 3 '?' porque eu to dizendo aqui (nome, email, password))
     //*'INSERT INTO usuarios (nome, email, password) VALUES (?, ?, ?)'
-    var result = await _execQuery(
+    var result = await _dbConfiguration.execQuery(
       'INSERT INTO usuarios (nome, email, password) VALUES (?, ?, ?)',
       [
         value.name,
@@ -40,7 +34,7 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
 
   @override
   Future<bool> delete(int id) async {
-    var result = await _execQuery(
+    var result = await _dbConfiguration.execQuery(
       'DELETE from usuarios where id = ?',
       [id],
     );
@@ -49,7 +43,7 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
 
   @override
   Future<List<UsuarioModel>> findAll() async {
-    var result = await _execQuery('SELECT * FROM usuarios');
+    var result = await _dbConfiguration.execQuery('SELECT * FROM usuarios');
     return result
         .map((r) => UsuarioModel.fromMap(r.fields))
         .toList()
@@ -58,7 +52,7 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
 
   @override
   Future<UsuarioModel?> findOne(int id) async {
-    var result = await _execQuery(
+    var result = await _dbConfiguration.execQuery(
       'SELECT * FROM usuarios WHERE id = ?',
       [id],
     );
@@ -69,7 +63,7 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
 
   @override
   Future<bool> update(UsuarioModel value) async {
-    var result = await _execQuery(
+    var result = await _dbConfiguration.execQuery(
       'UPDATE usuarios set nome = ?, password = ? where id = ?',
       [
         value.name,
@@ -82,7 +76,8 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
 
   //metodo criado para utilizar na 'usuario_service.dart'
   Future<UsuarioModel?> findByEmail(String email) async {
-    var r = await _execQuery('SELECT * FROM usuarios WHERE email = ?', [email]);
+    var r = await _dbConfiguration
+        .execQuery('SELECT * FROM usuarios WHERE email = ?', [email]);
     return r.affectedRows == 0 ? null : UsuarioModel.fromEmail(r.first.fields);
   }
 }
