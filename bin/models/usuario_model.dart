@@ -39,6 +39,13 @@ class UsuarioModel {
         map['dt_atualizacao'] ?? DateTime.now());
   }
 
+  // factory construida para usar no metodo 'findByEmail'
+  factory UsuarioModel.fromEmail(Map map) {
+    return UsuarioModel()
+      ..id = map['id']?.toInt()
+      ..password = map['password'];
+  }
+
   //para utilizarmos na 'usuario_api'
   factory UsuarioModel.fromRequest(Map<String, dynamic> map) {
     return UsuarioModel()

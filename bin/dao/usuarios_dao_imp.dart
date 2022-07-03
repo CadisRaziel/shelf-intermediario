@@ -79,4 +79,10 @@ class UsuariosDaoImp implements IDAO<UsuarioModel> {
     );
     return result.affectedRows > 0;
   }
+
+  //metodo criado para utilizar na 'usuario_service.dart'
+  Future<UsuarioModel?> findByEmail(String email) async {
+    var r = await _execQuery('SELECT * FROM usuarios WHERE email = ?', [email]);
+    return r.affectedRows == 0 ? null : UsuarioModel.fromEmail(r.first.fields);
+  }
 }

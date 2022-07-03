@@ -41,4 +41,9 @@ class UsuarioService implements IGenericService<UsuarioModel> {
       return _usuariosDaoImp.create(value);
     }
   }
+
+  //metodo criado para utilizar em 'auth_to.dart'
+  Future<UsuarioModel?> findByEmail(String email) async {
+    return _usuariosDaoImp.findByEmail(email);
+  }
 }
