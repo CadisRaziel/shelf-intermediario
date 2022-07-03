@@ -1,3 +1,5 @@
+import 'package:password_dart/password_dart.dart';
+
 import '../dao/usuarios_dao_imp.dart';
 import '../models/usuario_model.dart';
 import 'generic_service.dart';
@@ -33,6 +35,9 @@ class UsuarioService implements IGenericService<UsuarioModel> {
     if (value.id != null) {
       return _usuariosDaoImp.update(value);
     } else {
+      //somente quando o usuario for criado eu vou por um hash na senha
+      final hash = Password.hash(value.password!, PBKDF2());
+      value.password = hash;
       return _usuariosDaoImp.create(value);
     }
   }
