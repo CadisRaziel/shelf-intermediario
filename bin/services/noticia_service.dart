@@ -7,23 +7,23 @@ class NoticiaService implements IGenericService<NoticiaModel> {
   final List<NoticiaModel> _fakeDB = [];
 
   @override
-  bool delete(int id) {
+  Future<bool> delete(int id) async {
     _fakeDB.removeWhere((e) => e.id == id);
     return true;
   }
 
   @override
-  List<NoticiaModel> findAll() {
+  Future<List<NoticiaModel>> findAll() async {
     return _fakeDB;
   }
 
   @override
-  NoticiaModel findOne(int id) {
+  Future<NoticiaModel?> findOne(int id) async {
     return _fakeDB.firstWhere((e) => e.id == id);
   }
 
   @override
-  bool save(NoticiaModel value) {
+  Future<bool> save(NoticiaModel value) async {
     //*Não Utilizando nossa extension que retorna null
     // NoticiaModel model = _fakeDB.firstWhere(
     //   //*se não encontrarmos o nosso 'id' dentro da lista

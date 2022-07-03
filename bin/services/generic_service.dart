@@ -2,9 +2,9 @@
 //! implements IGenericService<NoticiaModel> -> Repare no <NoticiaModel>
 //! Se não tivesse esse <T> aqui 'IGenericService<T>' eu nao consegueria fazer isso IGenericService<NoticiaModel> dar essa tipagem
 abstract class IGenericService<T> {
-  T findOne(int id);
-  List<T> findAll();
-  //save -> vai salvar um novo objeto ou um ja existente
-  bool save(T value);
-  bool delete(int id);
+  Future<T?> findOne(int id);
+  Future<List<T>> findAll();
+  //save -> update e create
+  Future<bool> save(T value);
+  Future<bool> delete(int id);
 }

@@ -25,9 +25,9 @@ class BlogNoticiaApi extends IApi {
     //!CRUD
 
     //listagem
-    router.get('/blog/noticias', (Request req) {
+    router.get('/blog/noticias', (Request req) async {
       //Injetando a dependencia eu posso utilizar os metodos da classe IGenericService(principio D do solid)
-      List<NoticiaModel> noticias = _service.findAll();
+      List<NoticiaModel> noticias = await _service.findAll();
       List<Map> noticiasMap = noticias.map((e) => e.toMap()).toList();
       return Response.ok(jsonEncode(noticiasMap));
     });

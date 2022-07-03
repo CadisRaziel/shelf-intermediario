@@ -1,11 +1,15 @@
+import 'package:mysql1/mysql1.dart';
 import 'package:shelf/shelf.dart';
 
 import 'apis/blog_noticia_api.dart';
 import 'apis/login_api.dart';
+import 'apis/usuario_api.dart';
+import 'dao/usuarios_dao_imp.dart';
 import 'infra/custom_server.dart';
 import 'infra/database/db_configuration.dart';
 import 'infra/dependency_injector/injects.dart';
 import 'infra/middleware_interception.dart';
+import 'models/usuario_model.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
@@ -17,12 +21,18 @@ void main() async {
   //Objeto criado para melhorar a responsabilidade unica da classe main
   final _di = Injects.initialize();
 
-  //passando por injecao de dependencia
-  //a aplicação nao sabe da onde vem o banco agora
-  var conexao = await _di.get<IDBConfiguration>().connection;
-
-  var result = await conexao.query('SELECT * FROM usuarios;');
-  print(result);
+  // UsuariosDaoImp _usuarioDAO = UsuariosDaoImp(_di.get<IDBConfiguration>());
+  // var usuario = UsuarioModel()
+  //   ..id = 15
+  //   ..name = 'novo user'
+  //   ..email = 'novouser@email.com'
+  //   ..password = '1234';
+  // _usuarioDAO.findAll().then(print); //LIST
+  // _usuarioDAO.findOne(1).then(print); //OBJ 1
+  // _usuarioDAO.create(usuario).then(print); // TRUE
+  // usuario.name = 'ATUALIZADO';
+  // _usuarioDAO.update(usuario).then(print); // TRUE
+  // _usuarioDAO.delete(13).then(print); // TRUE
 
   //metodo para trabalhar com varios 'handlers' ja que na 'initializeServer' só aceita 1
   var cascadeHandlers = Cascade()
@@ -32,6 +42,7 @@ void main() async {
         //se for false ele nao precisa ter os middleware de segurança (nao preciso especificar)
         _di.get<BlogNoticiaApi>().getHandler(isSecurity: true),
       )
+      .add(_di.get<UsuarioApi>().getHandler(isSecurity: true))
       .handler;
 
   //Colocando Middleware (repare no terminal '2022-06-19T20:58:34.870555  0:00:00.007970 GET     [200] /blog/noticias')

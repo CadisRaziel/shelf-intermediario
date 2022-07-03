@@ -3,9 +3,12 @@
 
 import '../../apis/blog_noticia_api.dart';
 import '../../apis/login_api.dart';
+import '../../apis/usuario_api.dart';
+import '../../dao/usuarios_dao_imp.dart';
 import '../../models/noticia_model.dart';
 import '../../services/generic_service.dart';
 import '../../services/noticia_service.dart';
+import '../../services/usuario_service.dart';
 import '../database/db_configuration.dart';
 import '../database/mysql_db_configuration_imp.dart';
 import '../security/security_service.dart';
@@ -45,6 +48,11 @@ class Injects {
       // isSingleton: false
     );
 
+    //registramos primeiro a camada mais externa (aqui será a que trata o db)
+    di.register<UsuariosDaoImp>(
+        () => UsuariosDaoImp(di.get<IDBConfiguration>()));
+    di.register<UsuarioService>(() => UsuarioService(di.get<UsuariosDaoImp>()));
+    di.register<UsuarioApi>(() => UsuarioApi(di.get<UsuarioService>()));
     return di;
   }
 }
