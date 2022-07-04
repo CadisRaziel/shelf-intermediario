@@ -49,7 +49,8 @@ void main() async {
   var handlerPipe = Pipeline()
       .addMiddleware(logRequests())
       //adicionando a classe de middleware que faz a interceptação e transforma o text/plain em aplication/json
-      .addMiddleware(MiddlewareInterception().middlerware)
+      .addMiddleware(MiddlewareInterception.contentTypeJson)
+      .addMiddleware(MiddlewareInterception.cors)
       // .addMiddleware(_securityService.authorization)
       // .addMiddleware(_securityService.verifyJwt)
       .addHandler(cascadeHandlers);

@@ -1,0 +1,16 @@
+cors -> Mecanismo que alguns navegadores modernos possuem onde toda vez que um dominio
+faz uma requisição para outro dominio
+
+exemplo: solicianto uma api entre sites
+tenho o site vitor.com.br e o site backend.com.br
+no site vitor.com.br eu tenho uma listagem de uma api que esta la no backend.com.br
+o vitor.com.br vai pergunta eai backend.com.br quais metodos voce tem disponivel, 
+o backend.com.br vai me responder as opções e apartir dai consigo fazer get, post, put e delete
+
+o cors acontece justamente quando tento consumir uma informação de um dominio apartado 
+e eu nao consigo saber as opções disponiveis que aquele cara tem
+
+explicação mais detalhada
+https://myxml.in/cors-tester.html
+podemos usar nosso codigo aqui para testar nesse site
+
